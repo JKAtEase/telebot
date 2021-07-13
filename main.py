@@ -38,7 +38,7 @@ app = Flask(__name__)
 def index():
     return ''
 
-@app.route('https://gittelebot.herokuapp.com/' + api_key, methods=['POST'])
+@app.route('/' + api_key, methods=['POST'])
 def webhook():
     if flask.request.headers.get('content-type') == 'application/json':
         json_string = flask.request.get_data().decode('utf-8')
