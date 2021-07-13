@@ -13,6 +13,7 @@ import telebot
 import convertapi
 import requests
 import nltk 
+import time
 from flask import Flask, request
 
 nltk.download("punkt")
