@@ -42,8 +42,7 @@ def index():
 
 @app.route('/' + api_key, methods=['POST'])
 def webhook():
-    update = request.get_json()
-    bot.process_new_updates([update])
+    bot.getUpdates()
     return "OK"
 #     if flask.request.headers.get('content-type') == 'application/json':
 #         json_string = flask.request.get_data().decode('utf-8')
