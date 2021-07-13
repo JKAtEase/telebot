@@ -33,7 +33,7 @@ convertapi.api_secret = file_conversion_api_key
 
 bot = telebot.TeleBot(api_key)
 server = Flask(__name__)
-  
+server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
 #Function for exiting.
 @bot.message_handler(commands=['Exit'])
 def exit(message):
@@ -121,9 +121,6 @@ def provide_functionality(message):
   except Exception as e:
         bot.reply_to(message, 'Something went wrong!')
 
-bot.enable_save_next_step_handlers(delay=1)
-bot.load_next_step_handlers()
-
 @server.route('/' + api_key, methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
@@ -138,6 +135,7 @@ def webhook():
     bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
     return "This is a get request.", 200
 
-server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+bot.enable_save_next_step_handlers(delay=1)
+bot.load_next_step_handlers()
 
   
