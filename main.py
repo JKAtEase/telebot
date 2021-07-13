@@ -34,35 +34,8 @@ file_conversion_api_key = "TdEcoAB76yK0xKcW"
 convertapi.api_secret = file_conversion_api_key
 
 bot = telebot.TeleBot(api_key)
-app = Flask(__name__)
+server = Flask(__name__)
 
-@app.route('/', methods=['GET', 'HEAD'])
-def index():
-    return ''
-
-@app.route('/' + api_key, methods=['POST'])
-def webhook():
-    bot.get_updates()
-    return "OK"
-#     if flask.request.headers.get('content-type') == 'application/json':
-#         json_string = flask.request.get_data().decode('utf-8')
-#         update = telebot.types.Update.de_json(json_string)
-#         bot.process_new_updates([update])
-#         return ''
-#     else:
-#         flask.abort(403)
-
-bot.remove_webhook()
-
-time.sleep(0.1)
-
-# Set webhook
-bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
-
-# Start flask server
-app.run(host="0.0.0.0",
-        port=int(os.environ.get('PORT', 5000)),
-        debug=True)
 
 #Function for exiting.
 @bot.message_handler(commands=['Exit'])
@@ -151,7 +124,25 @@ def provide_functionality(message):
   except Exception as e:
         bot.reply_to(message, 'Something went wrong!')
 
+        
+@server.route('/' + api_key, methods=['POST'])
+def getMessage():
+    json_string = request.get_data().decode('utf-8')
+    update = telebot.types.Update.de_json(json_string)
+    bot.process_new_updates([update])
+    return "!", 200
 
+
+@server.route("/")
+def webhook():
+    bot.remove_webhook()
+    bot.set_webhook(url='https://gittlelebot.herokuapp.com/' + api_key)
+    return "!", 200
+
+
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+        
 bot.enable_save_next_step_handlers(delay=1)
 bot.load_next_step_handlers()
 
