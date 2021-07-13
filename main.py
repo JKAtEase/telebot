@@ -33,7 +33,18 @@ convertapi.api_secret = file_conversion_api_key
 
 bot = telebot.TeleBot(api_key)
 server = Flask(__name__)
+  
+#Function for exiting.
+@bot.message_handler(commands=['Exit'])
+def exit(message):
+  bot.send_message(message.chat.id, "OK, Thank You very much for your patience. Apologies for any kind of trouble you might have faced. It was great talking to you.")
 
+
+@bot.message_handler(content_types=['text'])
+def markup_eg(message):
+  msg = bot.send_message(message.chat.id, "Hey there, Following are the functionalities I can provide you.\n Press the number you prefer...\n 1. Convert Doc to Pdf \n 2. Convert Images to PDF \n 3. Summarize a text \n 4. Exit")
+  bot.register_next_step_handler(msg, provide_functionality)
+  
 #Function to store number of sentences to be kept in the summary.
 def ask_no_of_sentences(message):
   try:
@@ -109,17 +120,6 @@ def provide_functionality(message):
       bot.register_next_step_handler(msg, provide_functionality)
   except Exception as e:
         bot.reply_to(message, 'Something went wrong!')
-  
-#Function for exiting.
-@bot.message_handler(commands=['Exit'])
-def exit(message):
-  bot.send_message(message.chat.id, "OK, Thank You very much for your patience. Apologies for any kind of trouble you might have faced. It was great talking to you.")
-
-
-@bot.message_handler(content_types=['text'])
-def markup_eg(message):
-  msg = bot.send_message(message.chat.id, "Hey there, Following are the functionalities I can provide you.\n Press the number you prefer...\n 1. Convert Doc to Pdf \n 2. Convert Images to PDF \n 3. Summarize a text \n 4. Exit")
-  bot.register_next_step_handler(msg, provide_functionality)
 
 bot.enable_save_next_step_handlers(delay=1)
 bot.load_next_step_handlers()
