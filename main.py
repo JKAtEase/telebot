@@ -32,21 +32,34 @@ file_conversion_api_key = "TdEcoAB76yK0xKcW"
 convertapi.api_secret = file_conversion_api_key
 
 bot = telebot.TeleBot(api_key)
-server = Flask(__name__)
+app = Flask(__name__)
 
-@server.route('/' + api_key, methods=['POST'])
-def getMessage():
-    bot.process_new_updates([telebot.types.Update.de_json(request.stream.read().decode("utf-8"))])
-    return "This are post requests.", 200
+@app.route('/', methods=['GET', 'HEAD'])
+def index():
+    return ''
 
-
-@server.route("/")
+@app.route(WEBHOOK_URL_PATH, methods=['POST'])
 def webhook():
-    bot.remove_webhook()
-    bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
-    return "This is a get request.", 200
+    if flask.request.headers.get('content-type') == 'application/json':
+        json_string = flask.request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        bot.process_new_updates([update])
+        return ''
+    else:
+        flask.abort(403)
 
-server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8443)))
+bot.remove_webhook()
+
+time.sleep(0.1)
+
+# Set webhook
+bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
+
+# Start flask server
+app.run(host="0.0.0.0",
+        port=443,
+        debug=True)
+
 #Function for exiting.
 @bot.message_handler(commands=['Exit'])
 def exit(message):
