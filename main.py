@@ -46,7 +46,7 @@ def webhook():
     bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
     return "This is a get request.", 200
 
-server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
+server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 8443)))
 #Function for exiting.
 @bot.message_handler(commands=['Exit'])
 def exit(message):
