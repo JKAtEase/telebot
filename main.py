@@ -58,7 +58,7 @@ bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
 
 # Start flask server
 app.run(host="0.0.0.0",
-        port=443,
+        port=8443,
         debug=True)
 
 #Function for exiting.
