@@ -45,7 +45,7 @@ def getMessage():
 @server.route("/")
 def webhook():
     bot.remove_webhook()
-    bot.set_webhook(url='https://aqueous-wave-88454.herokuapp.com/' + api_key)
+    bot.set_webhook(url='https://gittelebot.herokuapp.com/' + api_key)
     return "!", 200
 
 server.run(host="0.0.0.0", port=int(os.environ.get('PORT', 5000)))
