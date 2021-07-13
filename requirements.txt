@@ -1,0 +1,6 @@
+requests==2.25.1
+Flask==2.0.1
+convertapi==1.4.0
+nltk==3.6.2
+sumy==0.8.1
+pyTelegramBotAPI==3.8.1
